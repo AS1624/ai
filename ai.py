@@ -1,5 +1,8 @@
 import math
 import numpy as np
+import os
+
+os.environ["OPENBLAS_NUM_THREADS"] = "9"
 
 def sigmoid(x: float) -> float:
     if isinstance(x, list):
@@ -68,8 +71,9 @@ class ai:
                 )
                 if i > 0:
                     for k in range(len(self.network[i - 1])):
-                        newErrors[k] += (
-                            self.network[i][j][k] 
+                        newErrors[k] = (
+                            newErrors[k]
+                            + self.network[i][j][k] 
                             * sigmoid_deriv(self.z[i + 1][j])
                             * error[j]
                             * 1000
@@ -121,7 +125,7 @@ class ai:
 
 
     def randomWeights(self, numInputs:int):
-        return np.random.rand(numInputs + 1)
+        return np.full((numInputs + 1), 0.5)
 if __name__ == "__main__":    
     inputs = [
         [0, 0],
@@ -143,3 +147,4 @@ if __name__ == "__main__":
     print("\n\n")
 
     print(test.test(inputs, outputs))
+
